@@ -77,12 +77,12 @@ Use MongoDB with Flask templating to create a new HTML page that displays all of
 
 * Next, create a route called `/scrape` that will import your `scrapemars.py` script and call your `scrape` function.
 
-  * Store the return value in MongoDB as a Python dictionary.
+* Store the return value in Mongo as a Python dictionary.
 
 * Create a root route `/` that will query your Mongo database and pass the mars data into an HTML template to display the data.
-* 
-* 
-* ![](image/1.png)
+
+
+![](image/1.png)
 ![](image/2.png)
 ![](image/3.png)
 
