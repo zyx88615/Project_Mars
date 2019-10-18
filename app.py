@@ -1,18 +1,18 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, jsonify
 from flask_pymongo import PyMongo
 import scrapemars
 import pandas as pd
+from config import user,password
+
+
 
 app = Flask(__name__)
 
 # Use flask_pymongo to set up mongo connection
-app.config["MONGO_URI"] = "mongodb://localhost:27017/Mars_app"
+app.config["MONGO_URI"] = f"mongodb://{user}:{password}@neal-shard-00-00-lghic.mongodb.net:27017,neal-shard-00-01-lghic.mongodb.net:27017,neal-shard-00-02-lghic.mongodb.net:27017/test?ssl=true&replicaSet=neal-shard-0&authSource=admin&retryWrites=true&w=majority"
 mongo = PyMongo(app)
 
 
-
-# Or set inline
-# mongo = PyMongo(app, uri="mongodb://localhost:27017/craigslist_app")
 
 
 @app.route("/")
@@ -22,7 +22,7 @@ def Lastest_Mars_News():
     Weather_data = mongo.db.Weather.find_one()
     Hemisphere_data = mongo.db.Hemisphere.find_one()
     Table_data = scrapemars.scrape4()
-    TableHtml=Table_data.to_html(classes="data")
+    TableHtml=Table_data
 
 
 

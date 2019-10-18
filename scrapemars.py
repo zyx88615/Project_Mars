@@ -1,12 +1,15 @@
-from splinter import Browser
 from bs4 import BeautifulSoup
+from splinter import Browser
 import requests
 import pandas as pd
-
+from flask import jsonify
+from bson import json_util, ObjectId
+import json
 def init_browser():
     # @NOTE: Replace the path with your actual path to the chromedriver
-    executable_path = {'executable_path': 'chromedriver.exe'}
-    return Browser("chrome", **executable_path, headless=False)
+    
+
+    return Browser("chrome")
 
 
 def scrape():
@@ -25,7 +28,7 @@ def scrape():
     lastest["header"] = header.text.strip()
     browser.quit()
 
-    return lastest
+    return json.loads(json_util.dumps(lastest))
 
 def scrape1():
     browser = init_browser()
@@ -40,7 +43,7 @@ def scrape1():
     featured_img_address["Address"] = baseurl+temp_address
     browser.quit()
 
-    return featured_img_address
+    return json.loads(json_util.dumps(featured_img_address))
 
 
 def scrape2():
@@ -54,7 +57,7 @@ def scrape2():
     findtwit=findtwit.strip("")[8:-26]
     weather["info"]=findtwit.replace("\n", ", ")
     browser.quit()
-    return weather
+    return json.loads(json_util.dumps(weather))
 
 def scrape3():
     browser = init_browser()
@@ -62,7 +65,11 @@ def scrape3():
     browser.visit(url)
     html = browser.html
     soup = BeautifulSoup(html, 'html.parser')
-    findtimg = soup.find_all('img',class_="thumb")
+    try:
+        findtimg = soup.find_all('img',class_="thumb")
+    except AttributeError:
+        findtimg =None
+
     baseurl= "https://astropedia.astrogeology.usgs.gov/download/Mars/Viking/"
     browser.quit()
     ddd=[]
@@ -70,12 +77,13 @@ def scrape3():
        ddd.append(baseurl+x["src"][47:-10]+"/full.jpg")
     Hemi={}
     Hemi["address"]=ddd
-    return Hemi   
+    return json.loads(json_util.dumps(Hemi))
 
 def scrape4():
     url="https://space-facts.com/mars/"
     tables = pd.read_html(url)
-    df=tables[0]
+    df=tables[1]
     df.columns=["Description","Values"]
     df.set_index("Description", inplace=True)
-    return df
+    df1=df.to_html(classes="data")
+    return json.loads(json_util.dumps(df1))
