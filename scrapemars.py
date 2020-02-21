@@ -49,11 +49,11 @@ def scrape1():
 def scrape2():
     weather={}
     url= "https://twitter.com/marswxreport?lang=en"
-	response = requests.get(url)
-	soup1 = BeautifulSoup(response.text, 'lxml')
-	findtwit = soup1.find('p',class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text").text
-	findtwit=findtwit.strip("")[8:-26]
-	weather["info"]=findtwit.replace("\n", ", ")
+    response = requests.get(url)
+    soup1 = BeautifulSoup(response.text, 'lxml')
+    findtwit = soup1.find('p',class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text").text
+    findtwit=findtwit.strip("")[8:-26]
+    weather["info"]=findtwit.replace("\n", ", ")
 
     return json.loads(json_util.dumps(weather))
 
