@@ -49,12 +49,14 @@ def scrape1():
 def scrape2():
     browser = init_browser()
     weather={}
-	url= "https://twitter.com/marswxreport?lang=en"
-	response = requests.get(url)
-	soup1 = BeautifulSoup(response.text, 'lxml')
-	findtwit = soup1.find('p',class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text").text
-	weather=findtwit.strip("")[8:-26]
-	weather=weather.replace("\n", ", ")
+    url= "https://twitter.com/marswxreport?lang=en"
+    browser.visit(url)
+    html = browser.html
+    soup = BeautifulSoup(html, 'html.parser')
+    findtwit = soup.find('p',class_="TweetTextSize TweetTextSize--normal js-tweet-text tweet-text").text
+    findtwit=findtwit.strip("")[8:-26]
+    weather["info"]=findtwit.replace("\n", ", ")
+    browser.quit()
     return json.loads(json_util.dumps(weather))
 
 def scrape3():
